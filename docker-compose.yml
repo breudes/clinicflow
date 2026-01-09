@@ -56,5 +56,5 @@ services:
       - db-notification
       - rabbitmq
     environment:
-      MAIL_USER: <insira_aqui_seu_email_de_aplicativo>
-      MAIL_PASSWORD: <insira_aqui_sua_senha_de_aplicativo>
+      MAIL_USER: <insert_here_your_app_email>
+      MAIL_PASSWORD: <insert_here_your_app_email_password>
