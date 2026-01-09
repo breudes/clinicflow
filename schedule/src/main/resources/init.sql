@@ -47,7 +47,7 @@ INSERT INTO users (
     'Maria Silva',
     'maria.silva',
     '$2a$10$niylP0dR80IlKDWAPGQOBeGagkw4p1irCfodsuWCVU1yc.nMdq2Iu',
-    'minhapepi@gmail.com',
+    'maria@email.com',
     '1995-04-10',
     'PATIENT',
     TRUE
@@ -73,7 +73,7 @@ INSERT INTO users (
     'Ana Pereira',
     'ana.pereira',
     '$2a$10$XlZ65j.0jcrCzItH4BzN7e/sWUyUTnVcBQCTgT/ff5LfMdLXXEd9q',
-    'breudes@outlook.com',
+    'ana@email.com',
     '1988-02-15',
     'NURSE',
     TRUE,
