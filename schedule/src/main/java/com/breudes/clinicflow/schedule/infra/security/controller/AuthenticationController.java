@@ -6,8 +6,10 @@ import com.breudes.clinicflow.schedule.infra.security.data.UserAuthenticationDat
 import com.breudes.clinicflow.schedule.infra.security.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +26,18 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<TokenData> userLogin(@RequestBody @Valid UserAuthenticationData userAuthenticationData) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(
+    public ResponseEntity<String> userLogin(@RequestBody @Valid UserAuthenticationData userAuthenticationData) {
+        try{
+            var authenticationToken = new UsernamePasswordAuthenticationToken(
                 userAuthenticationData.username(),
                 userAuthenticationData.password()
-        );
-        var authenticatedUser = authenticationManager.authenticate(authenticationToken);
-        var JWTToken = tokenService.generateToken((User) authenticatedUser.getPrincipal());
-        return ResponseEntity.ok(new TokenData(JWTToken));
+            );
+            var authenticatedUser = authenticationManager.authenticate(authenticationToken);
+            var JWTToken = tokenService.generateToken((User) authenticatedUser.getPrincipal());
+            var tokenData = new TokenData(JWTToken);
+            return ResponseEntity.ok(tokenData.toString());
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
+        }
     }
 }
