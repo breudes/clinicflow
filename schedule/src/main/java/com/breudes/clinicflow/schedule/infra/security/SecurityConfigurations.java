@@ -30,7 +30,7 @@ public class SecurityConfigurations {
                         // all users can change user's password
                         .requestMatchers(HttpMethod.PATCH, "/users").permitAll()
                         // patient can see appointments (but only related to them)
-                        .requestMatchers(HttpMethod.GET, "/appointments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/appointments/**").permitAll()
                         // only doctor and nurse can create users and appointments
                         .requestMatchers(HttpMethod.POST, "/users").hasAnyRole("DOCTOR", "NURSE")
                         .requestMatchers(HttpMethod.POST, "/appointments").hasAnyRole("DOCTOR", "NURSE")

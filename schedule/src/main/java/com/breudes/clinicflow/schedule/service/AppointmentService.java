@@ -162,43 +162,24 @@ public class AppointmentService {
     }
 
     public List<AppointmentOutputDTO> listAppointmentByPatient(Long patientId) {
-        // If a patient wants to see one or multiple appointments
-        // Related to them
         User loggedUser = getAuthenticatedUserId();
-        assert loggedUser != null;
-        if(loggedUser.getUserType() == UserType.PATIENT){
-            Optional<User> foundPatient = userRepository.findById(patientId);
-            if(Objects.equals(loggedUser.getId(), patientId)){
-                if(foundPatient.isPresent()){
-                    List<Appointment> appointments = appointmentRepository.findByPatient(foundPatient.get());
-                    return appointments.stream()
-                            .map(AppointmentOutputDTO::fromEntity)
-                            .collect(Collectors.toList());
-            }
-        } else {
-                // Other cases
-                if(foundPatient.isPresent()){
-                    List<Appointment> appointments = appointmentRepository.findByPatient(foundPatient.get());
-                    return appointments.stream()
-                            .map(AppointmentOutputDTO::fromEntity)
-                            .collect(Collectors.toList());
-                } else {
-                    return null;
-                }
-            }
+
+        // If the user is a patient, they can only see their own queries
+        if (loggedUser.getUserType() == UserType.PATIENT && !Objects.equals(loggedUser.getId(), patientId)) {
+            throw new RuntimeException("Access denied: patient can only access their own appointments.");
         }
-        return null;
+
+        List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+
+        return appointments.stream()
+                .map(AppointmentOutputDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public List<AppointmentOutputDTO> listAppointmentByDoctor(Long doctorId) {
-        Optional<User> foundDoctor = userRepository.findById(doctorId);
-        if(foundDoctor.isPresent()){
-            List<Appointment> appointments = appointmentRepository.findByPatient(foundDoctor.get());
-            return appointments.stream()
+        List<Appointment> appointments = appointmentRepository.findByDoctorId(doctorId);
+        return appointments.stream()
                     .map(AppointmentOutputDTO::fromEntity)
                     .collect(Collectors.toList());
-        } else {
-            return null;
-        }
     }
 }

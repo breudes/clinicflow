@@ -23,4 +23,13 @@ public record AppointmentOutputDTO(
                 appointment.getTimezone()
         );
     }
+
+    public String toFormattedString() {
+        return "\n Appointment ID: " + id + "\n" +
+            "Patient: " + patient.getName() + " (" + patient.getEmail() + ")\n" +
+            "Doctor: " + doctor.getName() + " - " + doctor.getSpecialty() + "\n" +
+            "Status: " + status + "\n" +
+            "Date/Time: " + dateTime + "\n" +
+            "Timezone: " + (timezone != null ? timezone : "not informed") + "\n";
+    }
 }
